@@ -1,3 +1,6 @@
+pub mod packet;
+pub mod id;
+pub mod crypto;
 pub struct DiscoverySettings {
     pub network_id: u64,
     pub broadcast_addr: std::net::SocketAddr,
