@@ -10,5 +10,5 @@ echo "Android ARM64 için derleniyor..."
 cargo ndk build -t arm64-v8a --target-dir --platform 24   ./target
 
 echo "Linux'ta çalıştırılıyor..."
-adb push ./target/aarch64-linux-android/debug/bedrock-nethernet /tmp
+adb push ./target/aarch64-linux-android/debug/nethernet-test /tmp
 #./target/x86_64-unknown-linux-gnu/debug/bedrock-nethernet
