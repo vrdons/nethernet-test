@@ -1,0 +1,15 @@
+{
+  "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.files.excludeDirs": ["target", "/tmp/cargo-target"],
+  "rust-analyzer.checkOnSave": true,
+  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.numThreads": 0, 
+  "rust-analyzer.files.watcherExclude": {
+    "**/target": true,
+    "**/node_modules": true
+  },
+
+  "terminal.integrated.env.linux": {
+    "CARGO_TARGET_DIR": "/tmp/cargo-target"
+  }
+}
