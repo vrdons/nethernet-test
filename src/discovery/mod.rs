@@ -13,7 +13,7 @@ pub struct LanDiscovery {
 impl LanDiscovery {
     pub fn new(addr: std::net::SocketAddr) -> Self {
         let network_id = rand::random::<u64>();
-        log::debug!("Creating new Lan Discovery, Network ID: {}", network_id);
+        log::debug!("Creating new Lan Discovery on {}, Network ID: {}",addr, network_id);
         let config = std::sync::Arc::new(std::sync::Mutex::new(DiscoverySettings {
             broadcast_addr: addr,
             network_id,
@@ -54,4 +54,5 @@ impl LanDiscovery {
         self.connection = Some(arc.clone());
         Ok(arc)
     }
+    fn broadcast() {}
 }

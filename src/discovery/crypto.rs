@@ -36,7 +36,7 @@ pub fn decrypt(src: &[u8]) -> Result<Vec<u8>, std::io::Error> {
     })?;
     Ok(decrypted.to_vec())
 }
-pub fn checksum(payload: &[u8], byte: &[u8]) -> Result<(), std::io::Error> {
+pub fn checksum(payload: &[u8], byte: &[u8]) -> Result<[u8; 32], std::io::Error> {
     let key = make_key();
     let mut mac = <HmacSha256 as hmac::Mac>::new_from_slice(&key).map_err(|e| {
         std::io::Error::new(
@@ -46,7 +46,11 @@ pub fn checksum(payload: &[u8], byte: &[u8]) -> Result<(), std::io::Error> {
     })?;
     mac.update(&payload);
     let checksum = hmac::Mac::finalize(mac).into_bytes();
-    if &byte[..32] != checksum.as_slice() {
+    let checksum_array: [u8; 32] = checksum
+        .as_slice()
+        .try_into()
+        .expect("HMAC output is always 32 bytes");
+    if &byte[..32] != checksum_array.as_slice() {
         return Err(std::io::Error::new(
             std::io::ErrorKind::UnexpectedEof,
             format!(
@@ -56,5 +60,11 @@ pub fn checksum(payload: &[u8], byte: &[u8]) -> Result<(), std::io::Error> {
             ),
         ));
     }
-    Ok(())
+    Ok(checksum_array)
+}
+pub fn hmac_sha256(payload: &[u8]) -> [u8; 32] {
+    let key = make_key();
+    let mut mac =  <HmacSha256 as hmac::Mac>::new_from_slice(&key).unwrap();
+    mac.update(payload);
+    hmac::Mac::finalize(mac).into_bytes().try_into().unwrap()
 }
